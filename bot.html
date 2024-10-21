@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pain Chatbot with Voice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f9f9f9 0%, #d1c4e9 100%);
+            margin: 0;
+            padding: 0;
+        }
+        #chat-container {
+            max-width: 500px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 2px solid #7e57c2;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .message {
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        .user {
+            background-color: #0ca8bd;
+            color: #fff;
+            text-align: right;
+            margin-left: 50%;
+        }
+        .chatbot {
+            background-color: #26a69a;
+            color: #fff;
+        }
+        #user-input {
+            width: 65%;
+            padding: 12px;
+            border: 1px solid #030303ee;
+            border-radius: 8px;
+        }
+        #send-button, #voice-button {
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #voice-button {
+            background-color: #65cbdd;
+        }
+        #send-button {
+            background-color: #18044e;
+        }
+        #header {
+            text-align: center;
+            padding: 20px 0;
+        }
+        #header img {
+            height: 64px;
+            width: 64px;
+        }
+        #header h1 {
+            font-family: Georgia, serif;
+            color: #4a148c;
+        }
+        img {
+            display: block;
+            margin: 0 auto;
+        }
+        #chat-messages {
+              height: 300px; /* Set the height of the chat window */
+              overflow-y: auto; /* Enable vertical scrolling */
+              margin-bottom: 12px;
+              padding-right: 10px; /* Add padding to avoid scroll bar overlap */
+        }
+        #user-input-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        #voice-button {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section with Bot Image -->
+    <div id="header">
+        <img src="bot.jpg" alt="Bot Image">
+        <h1>Health Chatbot</h1>
+    </div>
+
+    <div id="chat-container">
+        <div class="message chatbot"> Health Chatbot: Welcome to the Health Chatbot. How can I assist you?</div>
+        <div id="chat-messages"></div>
+        <div id="user-input-container">
+            <button id="voice-button">🎤 Voice</button>
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let painData = [];
+
+        function loadPainData() {
+            painData = [
+            createPainEntry("Headache", "Dehydration, stress, lack of sleep, caffeine withdrawal", "Drinking plenty of fluids, getting enough sleep, and avoiding caffeine", "Staying hydrated, getting enough sleep, and managing stress"),
+
+createPainEntry("Musclepain", "Overuse, injury, vitamin deficiency", "Rest, ice, compression, and elevation", "Stretching before and after exercise, and getting enough magnesium and potassium"),
+
+createPainEntry("Jointpain", "Arthritis, injury, vitamin deficiency", "Over-the-counter pain relievers, physical therapy, and joint injections", "Maintaining a healthy weight, exercising regularly, and getting enough vitamin C and D"),
+
+createPainEntry("Backpain", "Poor posture, muscle strain, injury", "Rest, ice, over-the-counter pain relievers, and physical therapy", "Maintaining good posture, exercising regularly, and lifting heavy objects with proper form"),
+
+createPainEntry("Toothache", "Tooth decay, gum disease", "Vitamin D and calcium defeciency", "Brushing your teeth twice a day and flossing once a day"),
+
+createPainEntry("Earache", "Ear infection, foreign object in the ear", "Seeing a doctor for treatment", "Avoiding putting objects in your ear, and keeping your ears clean"),
+
+createPainEntry("Sorethroat", "Strep throat, viral infection", "Seeing a doctor for treatment, over-the-counter pain relievers, and gargling with salt water", "Getting enough rest, drinking fluids, and avoiding smoking"),
+
+createPainEntry("Stomachache", "Food poisoning, indigestion, stomach ulcer", "Over-the-counter pain relievers, eating bland foods, and drinking plenty of fluids", "Avoiding foods that you are allergic to or that upset your stomach, and getting enough fiber in your diet"),
+
+createPainEntry("Constipation", "Lack of fiber, dehydration, medication side effects", "Increasing your fiber intake, drinking plenty of fluids, and exercising regularly", "Eating a balanced diet that includes plenty of fruits, vegetables, and whole grains"),
+
+createPainEntry("Diarrhea", "Food poisoning, viral infection, irritable bowel syndrome", "Over-the-counter medications, drinking plenty of fluids, and avoiding foods that make your diarrhea worse", "Eating bland foods, and getting enough rest"),
+
+createPainEntry("Chestpain", "Heartburn, anxiety, heart attack", "Over-the-counter pain relievers, seeing a doctor for treatment", "Avoiding foods that trigger heartburn, managing stress, and getting enough exercise"),
+
+createPainEntry("Legcramps", "Low magnesium, dehydration", "Stretching, drinking plenty of fluids, and taking magnesium supplements", "Eating a balanced diet that includes plenty of magnesium-rich foods, such as leafy green vegetables, nuts, and seeds"),
+
+createPainEntry("Shinsplints", "Overuse, muscle strain", "Rest, ice, compression, and elevation", "Stretching before and after exercise, and getting enough calcium and vitamin D"),
+
+createPainEntry("Tenniselbow", "Overuse, muscle strain", "Rest, ice, compression, and elevation", "Stretching before and after exercise, and strengthening the muscles in your forearm"),
+
+createPainEntry("Sciatica", "Pain in the back that radiates down the leg", "Rest, ice, over-the-counter pain relievers, and physical therapy", "Maintaining a healthy weight, exercising regularly, and avoiding sitting or standing for long periods of time"),
+
+createPainEntry("Migraines", "Dehydration, stress, food allergies", "Over-the-counter pain relievers, seeing a doctor for treatment", "Staying hydrated, managing stress, and avoiding foods that trigger migraines"),
+
+createPainEntry("Pelvicpain", "Endometriosis, ovarian cysts, urinary tract infection", "Seeing a doctor for treatment", "Avoiding foods that trigger your pain, and getting enough rest"),
+
+createPainEntry("Headaches in children", "Dehydration, stress, allergies, eye strain", "Rest, drinking plenty of fluids, and avoiding caffeine", "Avoiding foods that trigger your child's headaches, and making sure they get enough sleep"),
+
+createPainEntry("Neckpain", "Poor posture, muscle strain, injury", "Rest, ice, over-the-counter pain relievers, and physical therapy", "Maintaining good posture, exercising regularly, and avoiding sitting or standing for long periods of time"),
+
+createPainEntry("Fingerpain", "Carpal tunnel syndrome, arthritis, injury", "Rest, ice, compression, and elevation", "Avoiding repetitive movements, and getting enough exercise"),
+
+createPainEntry("Heelpain", "Plantar fasciitis, heel spur, injury", "Rest, ice, over-the-counter pain relievers, and physical therapy", "Wearing supportive shoes, and stretching before and after exercise"),
+
+createPainEntry("TMJ pain", "Temporomandibular joint disorder, injury","Rest, over-the-counter pain relievers, and physical therapy ", "Avoiding clenching or grinding your teeth, and getting enough sleep"),
+
+createPainEntry("Shingles", "Chickenpox virusChickenpox virus", "Over-the-counter pain relievers, antiviral medication, and rest", "Getting the chickenpox vaccine"),
+
+createPainEntry("Shingles in children", "Chickenpox virus", "Antiviral medication, and rest", "Getting the chickenpox vaccine"),
+
+createPainEntry("Muscle cramps", "Low magnesium, dehydration", "Stretching, drinking plenty of fluids, and taking magnesium supplements", "Eating a balanced diet that includes plenty of magnesium-rich foods, such as leafy green vegetables, nuts, and seeds"),
+
+createPainEntry("Restless leg syndrome", "Iron deficiency, anemia, pregnancy", "Over-the-counter pain relievers, iron supplements, and lifestyle changes", "Eating a balanced diet that includes plenty of iron-rich foods, such as red meat, poultry, fish, beans, and leafy green vegetables")
+
+    // Add more health issues...
+            ];
+        }
+
+        function createPainEntry(pain, vitaminDeficiency, remedies, preventionMethods) {
+            return { Pain: pain, "Vitamin deficiency": vitaminDeficiency, Remedies: remedies, "Prevention methods": preventionMethods };
+        }
+
+        function getResponse(userInput) {
+            const userInputLower = userInput.toLowerCase().replace(/\s+/g, '');
+            for (const painEntry of painData) {
+                const painType = painEntry.Pain.toLowerCase().replace(/\s+/g, '');
+                if (userInputLower.includes(painType)) {
+                    return `For ${painType}:\nVitamin deficiency: ${painEntry["Vitamin deficiency"]}\nRemedies: ${painEntry.Remedies}\nPrevention Methods: ${painEntry["Prevention methods"]}`;
+                }
+            }
+            return "I couldn't find information on that issue.";
+        }
+
+        function chatWithBot(userInput) {
+            if (userInput.match(/hello|hi/i)) {
+                return "Welcome! Please give me your health issues.";
+            } else if (userInput.match(/thanks|tq/i)) {
+                return "You're welcome!";
+            } else if (userInput.match(/exit|goodbye/i)) {
+                return "Goodbye!";
+            } else {
+                return getResponse(userInput);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const chatMessages = document.getElementById("chat-messages");
+            const userInput = document.getElementById("user-input");
+            const sendButton = document.getElementById("send-button");
+            const voiceButton = document.getElementById("voice-button");
+
+            // Handle text input
+            sendButton.addEventListener("click", function () {
+                const userMessage = userInput.value.trim();
+                if (userMessage !== "") {
+                    appendMessage("user", userMessage);
+                    const botResponse = chatWithBot(userMessage);
+                    appendMessage("chatbot", botResponse);
+                    speakText(botResponse);
+                    userInput.value = "";
+                }
+            });
+
+            // Handle voice input
+            voiceButton.addEventListener("click", function () {
+                startVoiceRecognition();
+            });
+
+            function appendMessage(sender, message) {
+                const messageElement = document.createElement("div");
+                messageElement.className = `message ${sender}`;
+                messageElement.textContent = message;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Voice recognition using Web Speech API
+            function startVoiceRecognition() {
+                const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.onresult = function (event) {
+                    const voiceInput = event.results[0][0].transcript;
+                    userInput.value = voiceInput;
+                    sendButton.click();
+                };
+                recognition.start();
+            }
+
+            // Speech synthesis for chatbot response (without "Health Chatbot")
+            function speakText(text) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                window.speechSynthesis.speak(utterance);
+            }
+        });
+
+        // Initialize the chatbot data
+        loadPainData();
+    </script>
+</body>
+</html>
