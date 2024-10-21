@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pain Chatbot with Voice</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to external CSS file -->
+</head>
+<body>
+    <!-- Header Section with Bot Image -->
+    <div id="header">
+        <img src="bot.png" alt="Bot Image">
+        <h1>Health Chatbot</h1>
+    </div>
+
+    <div id="chat-container">
+        <div class="message chatbot"> Health Chatbot: Welcome to the Health Chatbot. How can I assist you?</div>
+        <div id="chat-messages"></div>
+        <div id="user-input-container">
+            <button id="voice-button">🎤 Voice</button>
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="chatbot.js"></script>
+</body>
+</html>
