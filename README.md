@@ -32,12 +32,6 @@ This project is a **Pain Management Chatbot** designed to assist users by provid
 - **DOM Manipulation**: For updating chat messages dynamically
 
 ---
-## File Structure 
-pain-management-chatbot/
-├── index.html        # Main HTML file
-├── script.js         # Contains chatbot logic
-├── style.css         # Styling for the chatbot
-└── README.md         # Project documentation
 
 ## Voice Interaction
 The chatbot uses the Web Speech API for:
